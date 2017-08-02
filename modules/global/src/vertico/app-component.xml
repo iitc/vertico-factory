@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
+               dependsOn="com.haulmont.cuba">
+    <module blocks="*"
+            name="global">
+        <artifact appJar="true"
+                  name="verticofactory-global"/>
+        <property name="cuba.persistenceConfig"
+                  value="+vertico/persistence.xml"/>
+        <property name="cuba.metadataConfig"
+                  value="+vertico/metadata.xml"/>
+        <property name="cuba.viewsConfig"
+                  value="+vertico/views.xml"/>
+    </module>
+    <module blocks="core"
+            dependsOn="global"
+            name="core">
+        <artifact appJar="true"
+                  name="verticofactory-core"/>
+        <artifact classifier="db"
+                  configuration="dbscripts"
+                  ext="zip"
+                  name="verticofactory-core"/>
+        <property name="cuba.springContextConfig"
+                  value="+vertico/spring.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+vertico.core"/>
+    </module>
+    <module blocks="web,desktop"
+            dependsOn="global"
+            name="gui">
+        <artifact appJar="true"
+                  name="verticofactory-gui"/>
+    </module>
+    <module blocks="web"
+            dependsOn="gui"
+            name="web">
+        <artifact appJar="true"
+                  name="verticofactory-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="verticofactory-web"/>
+        <artifact configuration="themes"
+                  name="verticofactory-web-themes"/>
+        <property name="cuba.springContextConfig"
+                  value="+vertico/web-spring.xml"/>
+        <property name="cuba.dispatcherSpringContextConfig"
+                  value="+vertico/web-dispatcher-spring.xml"/>
+        <property name="cuba.rest.queriesConfig"
+                  value="+vertico/rest-queries.xml"/>
+        <property name="cuba.windowConfig"
+                  value="+vertico/web-screens.xml"/>
+        <property name="cuba.menuConfig"
+                  value="+vertico/web-menu.xml"/>
+        <property name="cuba.permissionConfig"
+                  value="+vertico/web-permissions.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+vertico.web"/>
+    </module>
+    <module name="web-themes">
+        <artifact name="verticofactory-web-themes"/>
+    </module>
+</app-component>

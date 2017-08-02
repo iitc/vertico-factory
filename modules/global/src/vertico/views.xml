@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view class="vertico.entity.Instance"
+          extends="_local"
+          name="instance-view">
+        <property fetch="AUTO"
+                  name="donor"
+                  view="_minimal"/>
+        <property name="applications"
+                  view="_minimal"/>
+    </view>
+    <view class="vertico.entity.Applications"
+          extends="_local"
+          name="applications-browse-with-instance">
+        <property name="deployInstance"
+                  view="_minimal">
+            <property name="publicIP"/>
+            <property name="privateIP"/>
+        </property>
+    </view>
+    <view class="vertico.entity.Applications"
+          extends="_local"
+          name="applications-edit-with-instance">
+        <property name="deployInstance"
+                  view="_minimal"/>
+    </view>
+    <view class="vertico.entity.Donors"
+          extends="_minimal"
+          name="donors-view-edit">
+        <property name="email"/>
+        <property name="active"/>
+        <property name="credits"/>
+        <property name="secretKey"/>
+    </view>
+    <view class="vertico.entity.Donors"
+          name="donors-view-for-rest-api">
+        <property name="active"/>
+    </view>
+    <view class="vertico.entity.Instance"
+          extends="_local"
+          name="instance-view-for-rest-api-1">
+    </view>
+    <view class="vertico.entity.Applications"
+          extends="_local"
+          name="applications-rest-view-1">
+    </view>
+    <view class="vertico.entity.Donors"
+          extends="_local"
+          name="donor-profile-view-for-rest-1">
+        <property name="createTs"/>
+        <property name="createdBy"/>
+        <property name="updateTs"/>
+        <property name="updatedBy"/>
+    </view>
+</views>

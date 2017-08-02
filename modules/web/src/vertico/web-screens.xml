@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<screen-config xmlns="http://schemas.haulmont.com/cuba/screens.xsd">
+    <include file="vertico/screens.xml"/>
+    <screen id="vertico$Donors.browse"
+            template="vertico/web/donors/donors-browse.xml"/>
+    <screen id="vertico$Donors.edit"
+            template="vertico/web/donors/donors-edit.xml"/>
+    <screen id="vertico$Instance.edit"
+            template="vertico/web/instance/instance-edit.xml"/>
+    <screen id="vertico$Instance.browse"
+            template="vertico/web/instance/instance-browse.xml"/>
+    <screen id="vertico$Applications.browse"
+            template="vertico/web/applications/applications-browse.xml"/>
+    <screen id="vertico$Applications.edit"
+            template="vertico/web/applications/applications-edit.xml"/>
+</screen-config>

@@ -1,0 +1,10 @@
+alter table VERTICO_VOLUNTEER drop column VM_USAGE cascade ;
+alter table VERTICO_VOLUNTEER drop column VM_TRUST_FACTOR cascade ;
+alter table VERTICO_VOLUNTEER drop column VM_HEART_BEAT cascade ;
+alter table VERTICO_VOLUNTEER drop column VM_OTHER_INFO cascade ;
+alter table VERTICO_VOLUNTEER drop column VM_EARNINGS cascade ;
+alter table VERTICO_VOLUNTEER drop column VM_USER_NAME cascade ;
+alter table VERTICO_VOLUNTEER add column VM_USER_NAME varchar(255) ;
+alter table VERTICO_VOLUNTEER alter column VM_OPERATING_SYSTEM set data type varchar(255) ;
+alter table VERTICO_VOLUNTEER drop column VM_DISK_USAGE cascade ;
+alter table VERTICO_VOLUNTEER add column VM_DISK_USAGE varchar(255) ;

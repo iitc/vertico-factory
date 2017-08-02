@@ -1,0 +1,1 @@
+create unique index IDX_VERTICO_DEMANDS_UNIQ_NAME on VERTICO_DEMANDS (NAME) ;

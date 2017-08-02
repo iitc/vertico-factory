@@ -1,0 +1,279 @@
+
+buildscript {
+    ext.cubaVersion = '6.5.5'
+    repositories {
+        maven {
+            url 'https://repo.cuba-platform.com/content/groups/work'
+            credentials {
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'cuba')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : 'cuba123')
+            }
+        }
+        
+        
+        
+    }
+    dependencies {
+        classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
+    }
+}
+
+def globalModule = project(':verticofactory-global')
+def coreModule = project(':verticofactory-core')
+def guiModule = project(':verticofactory-gui')
+def webModule = project(':verticofactory-web')
+def webThemesModule= project(':verticofactory-web-themes')
+
+def servletApi = 'org.apache.tomcat:tomcat-servlet-api:8.0.26'
+
+
+apply(plugin: 'idea')
+apply(plugin: 'cuba')
+
+cuba {
+    artifact {
+        group = 'vertico'
+        version = '0.1'
+        isSnapshot = true
+    }
+    tomcat {
+        dir = "$project.rootDir/deploy/tomcat"
+        port = 6765
+        shutdownPort = 6766
+        debugPort = 17711
+        ajpPort = 10946
+    }
+}
+
+dependencies {
+    appComponent("com.haulmont.cuba:cuba-global:$cubaVersion")
+
+}
+
+def hsql = 'org.hsqldb:hsqldb:2.2.9'
+
+configure([globalModule, coreModule, guiModule, webModule]) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'idea')
+    apply(plugin: 'cuba')
+
+    dependencies {
+        testCompile('junit:junit:4.12')
+    }
+
+    task sourceJar(type: Jar) {
+        from file('src')
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives sourceJar
+    }
+}
+
+configure(globalModule) {
+    task enhance(type: CubaEnhancing)
+
+    
+    jar {
+        manifest {
+            attributes('App-Component-Id': cuba.artifact.group)
+            attributes('App-Component-Version': cuba.artifact.version + (cuba.artifact.isSnapshot ? '-SNAPSHOT' : ''))
+        }
+    }
+    
+}
+
+configure(coreModule) {
+
+    configurations {
+        jdbc
+        dbscripts
+    }
+
+    dependencies {
+        compile(globalModule)
+        provided(servletApi)
+        jdbc(hsql)
+        testRuntime(hsql)
+
+    }
+
+    task cleanConf(description: 'Cleans up conf directory') {
+        doLast {
+            def dir = new File(cuba.tomcat.dir, '/conf/verticofactory-core')
+            if (dir.isDirectory()) {
+                ant.delete(includeemptydirs: true) {
+                    fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
+                }
+            }
+        }
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
+        appName = 'verticofactory-core'
+        appJars('verticofactory-global', 'verticofactory-core')
+    }
+
+    task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
+        dbms = 'hsql'
+        host = 'localhost'
+        dbName = 'vertico'
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+
+    task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
+        dbms = 'hsql'
+        host = 'localhost'
+        dbName = 'vertico'
+        dbUser = 'sa'
+        dbPassword = ''
+    }
+}
+
+configure(guiModule) {
+    dependencies {
+        compile(globalModule)
+
+    }
+
+    task deployConf(type: Copy) {
+        from file('src')
+        include "vertico/**"
+        into "$cuba.tomcat.dir/conf/verticofactory"
+    }
+}
+
+configure(webModule) {
+    configurations {
+        webcontent
+    }
+
+    dependencies {
+        provided(servletApi)
+        compile(guiModule)
+
+    }
+    
+    task webArchive(type: Zip) {
+        from file("$buildDir/web")
+        from file('web')
+        classifier = 'web'
+    }
+
+    artifacts {
+        archives webArchive
+    }
+
+    task deployConf(type: Copy) {
+        from file('src')
+        include "vertico/**"
+        into "$cuba.tomcat.dir/conf/verticofactory"
+    }
+
+    task clearMessagesCache(type: CubaClearMessagesCache) {
+        appName = 'verticofactory'
+    }
+    deployConf.dependsOn clearMessagesCache
+
+    task cleanConf(description: 'Cleans up conf directory') {
+        doLast {
+            def dir = new File(cuba.tomcat.dir, '/conf/verticofactory')
+            if (dir.isDirectory()) {
+                ant.delete(includeemptydirs: true) {
+                    fileset(dir: dir, includes: '**/*', excludes: 'local.app.properties')
+                }
+            }
+        }
+    }
+
+    task deploy(dependsOn: [assemble, cleanConf], type: CubaDeployment) {
+        appName = 'verticofactory'
+        appJars('verticofactory-global', 'verticofactory-gui', 'verticofactory-web')
+    }
+    task buildScssThemes(type: CubaWebScssThemeCreation)
+    task deployThemes(type: CubaDeployThemeTask, dependsOn: buildScssThemes)
+    assemble.dependsOn buildScssThemes
+}
+
+
+
+
+configure(webThemesModule) {
+    apply(plugin: 'java')
+    apply(plugin: 'maven')
+    apply(plugin: 'cuba')
+
+    appModuleType = 'web-themes'
+
+    buildDir = file('../build/scss-themes')
+
+    sourceSets {
+        main {
+            java {
+                srcDir '.'
+            }
+            resources {
+                srcDir '.'
+            }
+        }
+    }
+}
+
+
+task undeploy(type: Delete, dependsOn: ':verticofactory-web:cleanConf') {
+    delete("$cuba.tomcat.dir/shared")
+    delete("$cuba.tomcat.dir/webapps/verticofactory-core")
+    delete("$cuba.tomcat.dir/webapps/verticofactory")
+}
+
+task restart(dependsOn: ['stop', ':verticofactory-core:deploy', ':verticofactory-web:deploy'], description: 'Redeploys applications and restarts local Tomcat') {
+    doLast {
+        ant.waitfor(maxwait: 6, maxwaitunit: 'second', checkevery: 2, checkeveryunit: 'second') {
+            not {
+                socket(server: 'localhost', port: '17711')
+            }
+        }
+        start.execute()
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
+
+apply from: 'extra.gradle'
+
+task jelasticBuildWar(type: CubaWarBuilding) {
+    appHome = '..'
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    includeJdbcDriver = true
+    includeContextXml = true
+}
+
+task jelasticDeployWar(type: CubaJelasticDeploy, dependsOn: jelasticBuildWar) {
+    email = rootProject.hasProperty('jelasticEmail') ? rootProject['jelasticEmail'] : ''
+    password = rootProject.hasProperty('jelasticPassword') ? rootProject['jelasticPassword'] : ''
+    hostUrl = 'app.j.layershift.co.uk'
+    environment = 'vertico-beta'
+}
+
+task buildUberJar(type: CubaUberJarBuilding) {
+    portalPort = 1500
+    webPort = 1428
+    corePort = 1527
+    coreJettyEnvPath = 'modules/core/web/META-INF/jetty-env.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+}
+
+task buildWar(type: CubaWarBuilding) {
+    coreContextXmlPath = 'modules/core/web/META-INF/war-context.xml'
+    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+    appProperties = ['cuba.automaticDatabaseUpdate' : true]
+    includeContextXml = true
+    includeJdbcDriver = true
+    appHome = 'verticofactory'
+}

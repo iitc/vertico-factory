@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="vertico.web.applications.ApplicationsBrowse"
+        focusComponent="applicationsesTable"
+        lookupComponent="applicationsesTable"
+        messagesPack="vertico.web.applications">
+    <dsContext>
+        <groupDatasource id="applicationsesDs"
+                         class="vertico.entity.Applications"
+                         view="applications-browse-with-instance">
+            <query>
+                <![CDATA[select e from vertico$Applications e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="applicationsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="applicationsesTable"
+                datasource="applicationsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="applicationsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="appName"/>
+                <column id="deployInstance"/>
+                <column id="imageLocation"/>
+                <column id="status"/>
+                <column id="appType"/>
+                <column id="initScript"/>
+                <column id="stopScript"/>
+                <column id="applog"/>
+            </columns>
+            <rows datasource="applicationsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="applicationsesTable.create"/>
+                <button id="editBtn"
+                        action="applicationsesTable.edit"/>
+                <button id="removeBtn"
+                        action="applicationsesTable.remove"/>
+                <button id="refreshBtn"
+                        action="applicationsesTable.refresh"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<queries xmlns="http://schemas.haulmont.com/cuba/rest-queries.xsd">
+
+
+    <query name="getUserInfo" entity="vertico$Donors" view="donors-view-for-rest-api">
+        <jpql> <![CDATA[select c from vertico$Donors c where c.email = :email and c.secretKey = :secretKey ]]> </jpql>
+        <params>
+            <param name="email" type="java.lang.String"/>
+            <param name="secretKey" type="java.lang.String"/>
+        </params>
+    </query>
+
+    <query name="userPresent" entity="vertico$Donors" view="donors-view-for-rest-api">
+        <jpql> <![CDATA[select c from vertico$Donors c where c.email = :email  ]]> </jpql>
+        <params>
+            <param name="email" type="java.lang.String"/>
+        </params>
+    </query>
+
+
+    <query name="profile" entity="vertico$Donors" view="donor-profile-view-for-rest-1">
+        <jpql> <![CDATA[select c from vertico$Donors c where c.email = :email  ]]> </jpql>
+        <params>
+            <param name="email" type="java.lang.String"/>
+        </params>
+    </query>
+
+    <query name="list" entity="vertico$Instance" view="instance-view-for-rest-api-1">
+        <jpql> <![CDATA[
+                    SELECT p
+                    FROM vertico$Instance p
+                    JOIN  p.donor t
+                    where t.id = :userID
+                ]]>
+        </jpql>
+        <params>
+            <param name="userID" type="java.util.UUID"/>
+        </params>
+    </query>
+
+
+    <query name="list" entity="vertico$Applications" view="applications-rest-view-1">
+
+        <jpql> <![CDATA[
+                    SELECT p
+                    FROM  vertico$Applications p
+                    where p.deployInstance.id = :instanceID
+                ]]>
+        </jpql>
+        <params>
+            <param name="instanceID" type="java.util.UUID"/>
+        </params>
+
+    </query>
+
+
+
+    <!--
+     Not supported
+    <query name="update" entity="vertico$Applications" view="applications-rest-view-1">-->
+
+        <!--<jpql> <![CDATA[-->
+                   <!--UPDATE vertico$Applications v-->
+                   <!--SET v.status = :status-->
+                   <!--WHERE v.id = :appID-->
+                <!--]]>-->
+        <!--</jpql>-->
+        <!--<params>-->
+            <!--<param name="status" type="java.lang.String"/>-->
+            <!--<param name="appID" type="java.util.UUID"/>-->
+        <!--</params>-->
+
+    <!--</query>-->
+
+
+</queries>

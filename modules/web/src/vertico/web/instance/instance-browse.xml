@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="vertico.web.instance.InstanceBrowse"
+        focusComponent="instancesTable"
+        lookupComponent="instancesTable"
+        messagesPack="vertico.web.instance">
+    <dsContext>
+        <groupDatasource id="instancesDs"
+                         class="vertico.entity.Instance"
+                         view="instance-view">
+            <query>
+                <![CDATA[select e from vertico$Instance e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="instancesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="instancesTable"
+                datasource="instancesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="instancesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="nickname"/>
+                <column id="os"/>
+                <column id="publicIP"/>
+                <column id="privateIP"/>
+                <column id="ram"/>
+                <column id="diskSpace"/>
+                <column id="cpu"/>
+                <column id="status"/>
+                <column id="credits"/>
+                <column id="donor"/>
+                <column id="info"/>
+            </columns>
+            <rows datasource="instancesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="instancesTable.create"/>
+                <button id="editBtn"
+                        action="instancesTable.edit"/>
+                <button id="removeBtn"
+                        action="instancesTable.remove"/>
+                <button id="refreshBtn"
+                        action="instancesTable.refresh"/>
+                <button id="excelBtn"
+                        action="instancesTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

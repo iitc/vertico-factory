@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="vertico.web.donors.DonorsBrowse"
+        focusComponent="donorsesTable"
+        lookupComponent="donorsesTable"
+        messagesPack="vertico.web.donors">
+    <dsContext>
+        <groupDatasource id="donorsesDs"
+                         class="vertico.entity.Donors"
+                         view="_local">
+            <query>
+                <![CDATA[select e from vertico$Donors e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="donorsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="donorsesTable"
+                datasource="donorsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="donorsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="username"/>
+                <column id="email"/>
+                <column id="credits"/>
+                <column id="active"/>
+                <column id="secretKey"/>
+            </columns>
+            <rows datasource="donorsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="donorsesTable.create"/>
+                <button id="editBtn"
+                        action="donorsesTable.edit"/>
+                <button id="removeBtn"
+                        action="donorsesTable.remove"/>
+                <button id="refreshBtn"
+                        action="donorsesTable.refresh"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

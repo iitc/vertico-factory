@@ -1,0 +1,7 @@
+rootProject.name = 'Vertico-Cloud-Service'
+include(':verticofactory-global', ':verticofactory-core', ':verticofactory-gui', ':verticofactory-web', ':verticofactory-web-themes')
+project(':verticofactory-global').projectDir = new File(settingsDir, 'modules/global')
+project(':verticofactory-core').projectDir = new File(settingsDir, 'modules/core')
+project(':verticofactory-gui').projectDir = new File(settingsDir, 'modules/gui')
+project(':verticofactory-web').projectDir = new File(settingsDir, 'modules/web')
+project(':verticofactory-web-themes').projectDir = new File(settingsDir, 'modules/web/themes')

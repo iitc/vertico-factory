@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="vertico.web.instance.InstanceEdit"
+        datasource="instanceDs"
+        focusComponent="fieldGroup"
+        messagesPack="vertico.web.instance">
+    <dsContext>
+        <datasource id="instanceDs"
+                    class="vertico.entity.Instance"
+                    view="instance-view"/>
+        <collectionDatasource id="donorsDs"
+                              class="vertico.entity.Donors"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from vertico$Donors e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="applicationsesDs"
+                              class="vertico.entity.Applications">
+            <query>
+                <![CDATA[select e from vertico$Applications e
+where e.deployInstance.id = :ds$instanceDs
+order by e.appName]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="applicationsDs"
+                    class="vertico.entity.Applications"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="instanceDs">
+                <column width="250px">
+                    <field property="nickname"/>
+                    <field property="os"
+                           rows="5"/>
+                    <field property="publicIP"/>
+                    <field property="privateIP"/>
+                    <field property="ram"/>
+                    <field property="diskSpace"/>
+                    <field property="cpu"/>
+                    <field property="status"/>
+                    <field property="credits"/>
+                    <field optionsDatasource="donorsDs"
+                           property="donor"/>
+                    <field property="info"
+                           rows="5"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <table id="table">
+            <columns>
+                <column id="appName"/>
+                <column id="imageLocation"/>
+                <column id="status"/>
+                <column id="appType"/>
+                <column id="applog"/>
+            </columns>
+            <rows datasource="applicationsesDs"/>
+        </table>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>
