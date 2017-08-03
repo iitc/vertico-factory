@@ -50,7 +50,7 @@ dependencies {
 
 }
 
-def hsql = 'org.hsqldb:hsqldb:2.2.9'
+def postgres = 'org.postgresql:postgresql:9.4.1212'
 
 configure([globalModule, coreModule, guiModule, webModule]) {
     apply(plugin: 'java')
@@ -95,8 +95,8 @@ configure(coreModule) {
     dependencies {
         compile(globalModule)
         provided(servletApi)
-        jdbc(hsql)
-        testRuntime(hsql)
+        jdbc(postgres)
+        testRuntime(postgres)
 
     }
 
@@ -117,19 +117,19 @@ configure(coreModule) {
     }
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
-        dbms = 'hsql'
+        dbms = 'postgres'
         host = 'localhost'
-        dbName = 'vertico'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbName = 'verticodb'
+        dbUser = 'postgres'
+        dbPassword = 'pw1234'
     }
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
-        dbms = 'hsql'
+        dbms = 'postgres'
         host = 'localhost'
-        dbName = 'vertico'
-        dbUser = 'sa'
-        dbPassword = ''
+        dbName = 'verticodb'
+        dbUser = 'postgres'
+        dbPassword = 'pw1234'
     }
 }
 
@@ -258,7 +258,7 @@ task jelasticDeployWar(type: CubaJelasticDeploy, dependsOn: jelasticBuildWar) {
     email = rootProject.hasProperty('jelasticEmail') ? rootProject['jelasticEmail'] : ''
     password = rootProject.hasProperty('jelasticPassword') ? rootProject['jelasticPassword'] : ''
     hostUrl = 'app.j.layershift.co.uk'
-    environment = 'vertico-beta'
+    environment = 'cs595demo'
 }
 
 task buildUberJar(type: CubaUberJarBuilding) {

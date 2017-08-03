@@ -8,9 +8,9 @@
       maxIdle="2"
       maxWaitMillis="5000"
       driverClassName="org.postgresql.Driver"
-      url="jdbc:postgresql://vertico.ccpbhnt0pjfg.us-west-2.rds.amazonaws.com:5432/data4trial"
-      username="coco"
-      password="c0c0#043"/>
+      url="jdbc:postgresql://localhost/verticodb"
+      username="postgres"
+      password="pw1234"/>
 
     <!-- Switch off session serialization -->
     <Manager pathname=""/>

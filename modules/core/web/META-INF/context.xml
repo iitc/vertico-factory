@@ -1,14 +1,14 @@
 <Context>
     <!-- Database connection -->
-    <Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
+    <Resource driverClassName="org.postgresql.Driver"
               maxIdle="2"
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password=""
+              password="pw1234"
               type="javax.sql.DataSource"
-              url="jdbc:hsqldb:hsql://localhost/vertico"
-              username="sa"/>
+              url="jdbc:postgresql://localhost/verticodb"
+              username="postgres"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>
     <!--<Resource driverClassName="com.mysql.jdbc.Driver"
@@ -20,13 +20,13 @@
           type="javax.sql.DataSource"
           url="jdbc:mysql://datastore.ccpbhnt0pjfg.us-west-2.rds.amazonaws.com:3306/db4trial?useSSL=false&amp;allowMultiQueries=true"
           username="coco"/>-->
-    <!--<Resource driverClassName="org.postgresql.Driver"
+    <!--<Resource driverClassName="org.hsqldb.jdbc.JDBCDriver"
           maxIdle="2"
           maxTotal="20"
           maxWaitMillis="5000"
           name="jdbc/CubaDS"
-          password="c0c0#043"
+          password=""
           type="javax.sql.DataSource"
-          url="jdbc:postgresql://vertico.ccpbhnt0pjfg.us-west-2.rds.amazonaws.com:5432/data4trial"
-          username="coco"/>-->
+          url="jdbc:hsqldb:hsql://localhost/vertico"
+          username="sa"/>-->
 </Context>

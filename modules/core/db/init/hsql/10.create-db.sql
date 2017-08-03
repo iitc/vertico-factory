@@ -57,8 +57,12 @@ create table VERTICO_APPLICATIONS (
     --
     APP_NAME varchar(255),
     DEPLOY_INSTANCE_ID varchar(36),
-    IMAGE_LOCATION varchar(255),
-    STATUS varchar(50),
+    IMAGE_LOCATION varchar(255) not null,
+    STATUS varchar(50) not null,
+    APP_TYPE varchar(50) not null,
+    INIT_SCRIPT longvarchar,
+    STOP_SCRIPT longvarchar,
+    APPLOG longvarchar,
     --
     primary key (ID)
 )^
