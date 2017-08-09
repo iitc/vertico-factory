@@ -118,7 +118,7 @@ configure(coreModule) {
 
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'postgres'
-        host = '129.114.108.1'
+        host = '129.114.109.103'
         dbName = 'verticodb'
         dbUser = 'postgres'
         dbPassword = 'pw1234'
@@ -126,7 +126,7 @@ configure(coreModule) {
 
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'postgres'
-        host = '129.114.108.1'
+        host = '129.114.109.103'
         dbName = 'verticodb'
         dbUser = 'postgres'
         dbPassword = 'pw1234'

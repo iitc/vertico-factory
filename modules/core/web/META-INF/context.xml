@@ -7,7 +7,7 @@
               name="jdbc/CubaDS"
               password="pw1234"
               type="javax.sql.DataSource"
-              url="jdbc:postgresql://129.114.108.1/verticodb"
+              url="jdbc:postgresql://129.114.109.103/verticodb"
               username="postgres"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>

@@ -18,7 +18,7 @@ public class Donors extends StandardEntity {
     protected String username;
 
     @NotNull(message = "{msg://vertico.entity/already.present}")
-    @Column(name = "EMAIL", nullable = false, unique = true, length = 30)
+    @Column(name = "EMAIL", nullable = false, unique = true, length = 100)
     protected String email;
 
     @Column(name = "CREDITS")
